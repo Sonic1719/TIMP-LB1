@@ -1,38 +1,36 @@
-#include "TableCipher.h"
-#include <iostream>
-#include <limits>
-#include <locale>
-#include <string>
+include "TableCipher.h"
+include <iostream>
+include <limits>
+include <locale>
+include <string>
 
 using namespace std;
 
 int main(int argc, char** argv)
 {
-    setlocale(LC_ALL, "ru_RU.UTF-8"); // Локаль для работы русского языка
+    setlocale(LC_ALL, "ru_RU.UTF-8");
     int key;
     wstring text;
     unsigned op;
 
-    // Вечный цикл ввода ключа. Он завершится (`break`) только когда введут нормальное число > 0
     while(true) { 
         wcout << L"Введите ключ (число столбцов): ";
-        if(wcin >> key) { // Если ввели именно число
-            if(key == 0) { // Ключ 0 создаст ошибку деления в алгоритме
+        if(wcin >> key) {
+            if(key == 0) { 
                 wcout << L"Ключ не должен быть равен 0. Попробуйте снова.\n";
                 continue; 
             }
             // Очищаем буфер ввода, чтобы убрать символ перевода строки '\n'
             wcin.ignore(numeric_limits<streamsize>::max(), L'\n'); 
-            break; // Все ок, выходим из цикла валидации ключа
+            break;
         } else {
-            // Срабатывает, если вместо числа ввели буквы (например "привет")
             wcout << L"Неверный ввод ключа. Ключ - число больше нуля.\n";
             wcin.clear(); // Сбрасываем флаг ошибки ввода
-            wcin.ignore(numeric_limits<streamsize>::max(), L'\n'); // Полностью чистим буфер
+            wcin.ignore(numeric_limits<streamsize>::max(), L'\n'); 
         }
     }
 
-    TableCipher cipher(key); // Инициализируем класс ключом
+    TableCipher cipher(key);
     wcout << L"Ключ загружен\n";
 
     do {
@@ -43,12 +41,12 @@ int main(int argc, char** argv)
             if(op > 3) {
                 wcout << L"Неправильная операция\n";
             } 
-            else if(op == 3) { // Функция быстрой смены ключа прямо во время работы программы
+            else if(op == 3) {
                 while(true) {
                     wcout << L"Введите новый ключ: ";
                     if(wcin >> key && key != 0) {
                         wcin.ignore(numeric_limits<streamsize>::max(), L'\n'); 
-                        cipher = TableCipher(key); // Перезаписываем объект шифратора новым ключом
+                        cipher = TableCipher(key);
                         wcout << L"Ключ успешно изменён\n";
                         break;
                     } else {
@@ -60,7 +58,6 @@ int main(int argc, char** argv)
             } 
             else if(op > 0) { // Если выбрали 1 или 2
                 wcout << L"Введите текст: ";
-                // Используем getline вместо wcin >> text, чтобы можно было вводить строки С ПРОБЕЛАМИ
                 getline(wcin, text); 
                 
                 if(op == 1) {
