@@ -49,6 +49,11 @@ std::wstring TableCipher::decrypt(const std::wstring& encrypted_text)
     }
 
     wchar_t table[rows][key];
+	for (int r = 0; r < rows; r++){
+		for (int c = 0; c < key; c++){
+			table[r][c] = L'\0';
+		}
+	}
     int index = 0;
     for(int i = key - 1; i >= 0; i--) {    // Идем по столбцам с конца
         for(int j = 0; j < rows; j++) {    // Сверху вниз
